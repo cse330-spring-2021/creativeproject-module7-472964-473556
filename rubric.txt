@@ -1,0 +1,23 @@
+Rubric turned in on time (5 points)
+
+Language/Frameworks used (30 points) 
+• 10 - Learned/Used React frontend
+• 10 - Learned/Used Flask backend 
+• 10 - Learned/Used Mongo Database 
+
+Functionality (40 points)
+• 10 - Users can register, login, logout
+• 10 - Users can complete mood survey
+• 10 - Visualization of survey data 
+• 10 - Users can receive suggestions 
+
+Best Practices (7 points)
+• 2 - Passwords are salted and hashed 
+• 3 - Code is readable and well-formatted 
+• 2 - All pages pass the html validator 
+
+Usability (3 points) 
+• 2 - Site is intuitive to use and navigate 
+• 1 - Site is visually appealing 
+
+Creative portion (15 points)
