@@ -2,31 +2,53 @@
 import './App.css';
 import Home from './Home';
 import Login from './Login';
+import { Redirect } from 'react-router-dom';
 
 
 
 
 function App() {
 
-// useEffect(() => {
-//   const loggedInUser = localStorage.getItem("user");
-//   if (loggedInUser) {
-//     const foundUser = JSON.parse(loggedInUser);
-//     setUser(foundUser);
-//   }
+  //const [loggedInUser, setLoggedInUser] = useState(""); 
 
-// }, []);
-  return (
-    <div className="App">
-      <header className="App-header">
-        
-        {/* <Login/> */}
-        {/* <Redirect from="/login" to="/home" /> */}
+  var loggedInUser;
+  try{
+    loggedInUser = localStorage.getItem("user");
+  }
+  catch(err){
+    loggedInUser = null;
+  }
+  
+  
+  // return(
+  //   <div className="App">
+  //       <header className="App-header">
+          
+  //         <Login/>
+  //         {/* <Redirect from="/login" to="/home" /> */}
+  //         {/* <Home/> */}
+
+  //       </header>
+  //     </div>
+  // )
+
+  
+  
+    if (loggedInUser) {
+      //const foundUser = JSON.parse(loggedInUser);
+      //setUser(foundUser);
+      
+
+      return(
         <Home/>
-
-      </header>
-    </div>
-  );
+      )
+    }
+    else{
+      // localStorage.clear();
+      return(
+        <Redirect push to="/login"/>
+      )
+    }
 }
 
 export default App;

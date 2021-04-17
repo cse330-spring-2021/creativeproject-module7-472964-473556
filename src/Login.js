@@ -2,6 +2,7 @@
 import React, { useState} from 'react';
 import axios from 'axios';
 // import { useHistory } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
  
 
     //     <div className = "newUser">
@@ -13,12 +14,30 @@ import axios from 'axios';
             
 function LoginComponent() {
     //const history = useHistory();
+
+    const [redirect, setRedirect] = useState(false);
+
+    var loggedInUser;
+    try{
+      loggedInUser = localStorage.getItem("user");
+    }
+    catch(err){
+      loggedInUser = null;
+    }
+
+    const checkLoggedIn = () => {
+        if (loggedInUser) {
+            return <Redirect to='/' />
+        }
+    }
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [newUsername, setNewUsername] = useState("");
     const [newPassword, setNewPassword] = useState("");
 
     const [user, setUser] = useState();
+
+    
     
     // handleLogin = e => {
     //     e.preventDefault();
@@ -42,11 +61,14 @@ function LoginComponent() {
         .then(response => response.data)
         .then(data => {
             if(data.success) {
-                setUser(data)
+                setUser(data.username)
                 // store the user in localStorage
-                localStorage.setItem('user', data)
+                localStorage.setItem('user', user);
+                console.log(user);
+                console.log("hi");
                 console.log("Successful Login: ", data.username);
-                //history.push('/');
+
+                setRedirect(true);
             
             }
             else {
@@ -68,11 +90,13 @@ function LoginComponent() {
         .then(data => {
             if(data.success) {
                   // set the state of the user
-                //setUser(data)
+                setUser(data.username);
                 // store the user in localStorage
-                //localStorage.setItem('user', data)
+                localStorage.setItem('user', data.username);
+                console.log("hi");
                 console.log("Successful Login: ", data.username);
                 //history.push("/");
+                setRedirect(true);
             }
             else {
                 alert("Username or password incorrect")
@@ -85,10 +109,17 @@ function LoginComponent() {
 
     };
 
+    const renderRedirect = () => {
+        if (redirect) {
+          return <Redirect to='/' />
+        }
+      }
 
 
     return (
         <div className="Login">
+            {checkLoggedIn()}
+            {renderRedirect()}
             <h1>Login:</h1>
             <form onSubmit={login} method='POST'>
                 <div className = "existingUser">
