@@ -29,15 +29,14 @@ def handle_new_user():
         'username': username,
         'success': True
     }  
-    db.user_collection.insert({"username": username, "password": pw_hash})
+    db.user_collection.insert({"username": username, "password": pw_hash, "mood": [], "symptoms": [], "stress": [], "sleep" : []})
     return jsonify(loginInfo)
 
 @app.route('/login', methods=["POST"])
 def handle_login():
     username = request.json['username'] 
     password = request.json['password']
-    
-    
+
     query1 = db.user_collection.find_one({"username": username})
 
     if(query1):
@@ -53,3 +52,50 @@ def handle_login():
     'success': False
     }
     return jsonify(loginInfo)
+
+
+@app.route('/home', methods=["POST"])
+def handle_submit_form():
+    mood = request.json['mood'] 
+    symptoms = request.json['symptomsCount']
+    stress = request.json['stress']
+    sleep = request.json['sleep']
+    username = request.json['username']
+
+    print(mood, symptoms, stress, sleep, username)
+
+
+    resp1 = db.user_collection.update(
+        { "username": username },
+        { '$push': { "mood": mood}}
+    )
+
+    
+
+    resp2 = db.user_collection.update(
+        { "username": username },
+        { '$push': { "symptoms": symptoms}}
+    )
+
+    resp3 = db.user_collection.update(
+        { "username": username },
+        { '$push': { "stress": stress}}
+    )
+
+    resp4 = db.user_collection.update(
+        { "username": username },
+        { '$push': { "sleep": sleep}}
+    )
+
+
+
+    if resp1["nModified"] == 1 and resp2["nModified"] == 1 and resp3["nModified"] == 1 and resp4["nModified"] == 1:
+        submitInfo = {
+            'success1': True
+        }
+        return jsonify(submitInfo)
+    
+    submitInfo = {
+        'success': False
+    }
+    return jsonify(submitInfo)

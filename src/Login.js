@@ -63,7 +63,7 @@ function LoginComponent() {
             if(data.success) {
                 setUser(data.username)
                 // store the user in localStorage
-                localStorage.setItem('user', user);
+                localStorage.setItem('user', data.username);
                 console.log(user);
                 console.log("hi");
                 console.log("Successful Login: ", data.username);

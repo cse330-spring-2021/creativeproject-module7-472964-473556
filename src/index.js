@@ -9,9 +9,16 @@ import Login from './Login';
 const routing = (  
   <Router>  
     <div>  
-      <h1>React Router Example</h1>  
-      <Route exact path="/" component={App} />  
-      <Route path="/login" component={Login} />  
+      {/* <Redirect push to="/login"/>  */}
+      <div className="App">
+          <header className="App-header">
+          
+          <Route exact path="/" component={App} />  
+          <Route path="/login" component={Login} />  
+
+         </header>
+       </div>
+      
     </div>  
   </Router>  
 )

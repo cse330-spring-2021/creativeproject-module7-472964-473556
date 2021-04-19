@@ -40,13 +40,27 @@ function App() {
       
 
       return(
-        <Home/>
+        <div className="App">
+          <header className="App-header">
+          
+            <Home/>
+
+         </header>
+       </div>
+        
       )
     }
     else{
       // localStorage.clear();
       return(
-        <Redirect push to="/login"/>
+        <div className="App">
+          <header className="App-header">
+          
+          <Redirect push to="/login"/>
+
+         </header>
+       </div>
+        
       )
     }
 }
