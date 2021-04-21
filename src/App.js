@@ -1,7 +1,8 @@
 // import logo from './logo.svg';
 import './App.css';
-import Home from './Home';
+import Form from './Form';
 import Login from './Login';
+import Home from './Home';
 import { Redirect } from 'react-router-dom';
 
 
@@ -35,10 +36,6 @@ function App() {
   
   
     if (loggedInUser) {
-      //const foundUser = JSON.parse(loggedInUser);
-      //setUser(foundUser);
-      
-
       return(
         <div className="App">
           <header className="App-header">
@@ -47,7 +44,6 @@ function App() {
 
          </header>
        </div>
-        
       )
     }
     else{

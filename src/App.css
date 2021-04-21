@@ -9,14 +9,15 @@
   justify-content: center;
   line-height: 1.8;
   font-size: calc(10px + 2vmin);
-
 }
-#username, #password, #newpassword {
+#username,
+#password,
+#newpassword {
   margin-right: 10px;
 }
 #newusername {
   margin-left: 10px;
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 .slidecontainer {
@@ -25,15 +26,15 @@
 
 /* The slider itself */
 .slider {
-  -webkit-appearance: none;  /* Override default CSS styles */
+  -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
   width: 100%; /* Full-width */
   height: 25px; /* Specified height */
   background: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
+  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+  transition: opacity 0.2s;
 }
 
 /* Mouse-over effects */
@@ -47,15 +48,20 @@
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4CAF50; /* Green background */
+  background: #4caf50; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
 .slider::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4CAF50; /* Green background */
+  background: #4caf50; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
-
+#closeButton {
+  float: right;
+  color: white;
+  background-color: red;
+  border: none;
+}

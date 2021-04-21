@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo 
 import db
 from flask_bcrypt import Bcrypt
+from bson.json_util import dumps, loads
 
 #https://exploreflask.com/en/latest/forms.html
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def handle_new_user():
         'username': username,
         'success': True
     }  
-    db.user_collection.insert({"username": username, "password": pw_hash, "mood": [], "symptoms": [], "stress": [], "sleep" : []})
+    db.user_collection.insert({"username": username, "password": pw_hash, "mood": [], "symptoms": [], "stress": [], "sleep" : [], "score" : []})
     return jsonify(loginInfo)
 
 @app.route('/login', methods=["POST"])
@@ -54,23 +55,22 @@ def handle_login():
     return jsonify(loginInfo)
 
 
-@app.route('/home', methods=["POST"])
+@app.route('/form', methods=["POST"])
 def handle_submit_form():
     mood = request.json['mood'] 
     symptoms = request.json['symptomsCount']
     stress = request.json['stress']
     sleep = request.json['sleep']
     username = request.json['username']
+    score = request.json['score']
 
-    print(mood, symptoms, stress, sleep, username)
+    print(mood, symptoms, stress, sleep, username, score)
 
 
     resp1 = db.user_collection.update(
         { "username": username },
         { '$push': { "mood": mood}}
     )
-
-    
 
     resp2 = db.user_collection.update(
         { "username": username },
@@ -87,11 +87,16 @@ def handle_submit_form():
         { '$push': { "sleep": sleep}}
     )
 
+    resp5 = db.user_collection.update(
+        { "username": username },
+        { '$push': { "score": score}}
+    )
 
 
-    if resp1["nModified"] == 1 and resp2["nModified"] == 1 and resp3["nModified"] == 1 and resp4["nModified"] == 1:
+
+    if resp1["nModified"] == 1 and resp2["nModified"] == 1 and resp3["nModified"] == 1 and resp4["nModified"] == 1 and resp5["nModified"] == 1:
         submitInfo = {
-            'success1': True
+            'success': True
         }
         return jsonify(submitInfo)
     
@@ -99,3 +104,18 @@ def handle_submit_form():
         'success': False
     }
     return jsonify(submitInfo)
+
+
+@app.route('/get_data', methods=["POST"])
+def handle_chart_data():
+    username = request.json['username']
+    query1 = db.user_collection.find({"username": username})
+
+    if query1:
+        json_data = dumps(query1) 
+        return json_data
+    
+    getInfo = {
+        'success': False
+    }
+    return jsonify(getInfo)

@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Login from './Login';
+import Form from './Form';
 
 const routing = (  
   <Router>  
@@ -15,6 +16,7 @@ const routing = (
           
           <Route exact path="/" component={App} />  
           <Route path="/login" component={Login} />  
+          <Route path="/form" component={Form} />  
 
          </header>
        </div>
