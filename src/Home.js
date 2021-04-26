@@ -16,6 +16,18 @@ function HomeComponent(){
     const [chartMoodState, setMoodChartState] = useState({});
     const [chartSymptomsState, setSymptomsChartState] = useState({});
 
+    const [inspirationalQuotes, setInspirationQuotes] = useState({});
+    const [gotQuotes, setQuotes] = useState(false);
+
+    let blues = ["rgb(13, 0, 132)", "rgb(13, 89, 231)", "rgb(13, 195, 255)", "rgb(0, 0, 255)"];
+    let greens = ["rgb(60, 179, 113)", "rgb(0, 117, 96)", "rgb(131, 250, 182)", "rgb(0, 80, 0)"];
+    let reds = ["rgb(255, 0, 0)", "rgb(151, 0, 0)", "rgb(255, 117, 122)", "rgb(255, 158, 190)"];
+    let grays = ["rgb(240, 240, 240)", "rgb(180, 180, 180)", "rgb(120, 120, 120)", "rgb(60, 60, 60)"];
+    let purples = ["rgb(106, 90, 205)", "rgb(230, 206, 255)", "rgb(69, 0, 215)", "rgb(175, 102, 255)"];
+
+    const [colorScheme, setColorScheme] = useState(grays);
+    
+
     const takeSurvey = () => {
         console.log("hello");
         setRedirectForm(true);
@@ -39,7 +51,32 @@ function HomeComponent(){
         }
     }
 
-    //let chartData = {}
+    const fetchQuote = () => {
+        axios.get("https://type.fit/api/quotes")
+        .then((response) => {
+            setInspirationQuotes(response.data);
+            console.log("fetching quote", inspirationalQuotes);
+            
+            if(chartData != {} && chartData != null){
+                if(chartData[0] && inspirationalQuotes[chartData[0]["score"].length]){
+                    let quote = inspirationalQuotes[chartData[0]["score"].length]["text"];
+                    let author = inspirationalQuotes[chartData[0]["score"].length]["author"];
+                    console.log(quote);
+                    document.getElementById("inspirationalQuote").innerHTML = quote;
+                    document.getElementById("inspirationalAuthor").innerHTML = "-" + author;
+                    console.log("author",author);
+                    setQuotes(true);
+                }
+                
+            }
+            else{
+                console.log("chart data not defined");
+            }
+
+        });
+        
+    }
+
 
     const getChartData = () => {
         console.log("in chart data");
@@ -81,6 +118,7 @@ function HomeComponent(){
             let tired_count = 0;
 
             console.log("chart", chartData);
+            console.log("color scheme", colorScheme);
 
             for(let i = 0; i < chartData[0]["score"].length; i++){
                 scoreLabels.push(i);
@@ -148,7 +186,7 @@ function HomeComponent(){
                     label: 'Score',
                     fill: false,
                     lineTension: 0.5,
-                    backgroundColor: 'rgba(75,192,192,1)',
+                    backgroundColor: colorScheme[0],
                     borderColor: 'rgba(0,0,0,1)',
                     borderWidth: 2,
                     data: chartData[0]["score"]
@@ -161,7 +199,7 @@ function HomeComponent(){
                 datasets: [
                 {
                     label: 'Sleep (hours)',
-                    backgroundColor: 'rgba(75,192,192,1)',
+                    backgroundColor: `${colorScheme[1]}`,
                     borderColor: 'rgba(0,0,0,1)',
                     borderWidth: 2,
                     data: [count_1, count_2, count_3, count_4, count_5]
@@ -176,7 +214,7 @@ function HomeComponent(){
                     label: 'Stress',
                     fill: true,
                     lineTension: 0.5,
-                    backgroundColor: 'rgba(75,192,192,1)',
+                    backgroundColor: `${colorScheme[2]}`,
                     borderColor: 'rgba(0,0,0,1)',
                     borderWidth: 2,
                     data: chartData[0]["stress"]
@@ -189,12 +227,7 @@ function HomeComponent(){
                 datasets: [
                   {
                     label: 'Rainfall',
-                    backgroundColor: [
-                      '#B21F00',
-                      '#C9DE00',
-                      '#2FDE00',
-                      '#00A6B4'
-                    ],
+                    backgroundColor: colorScheme,
                     hoverBackgroundColor: [
                     '#501800',
                     '#4B5000',
@@ -211,7 +244,7 @@ function HomeComponent(){
                 datasets: [
                 {
                     label: 'Symptoms',
-                    backgroundColor: 'rgba(75,192,192,1)',
+                    backgroundColor: `${colorScheme[3]}`,
                     borderColor: 'rgba(0,0,0,1)',
                     borderWidth: 2,
                     data: symptomsData
@@ -221,6 +254,16 @@ function HomeComponent(){
         }
     }
 
+    const setColor = (e) => {
+        //e.preventDefault();
+        console.log(e);
+        setColorScheme(e);
+        console.log(colorScheme);
+        setChart();
+
+        console.log(colorScheme[2].toString());
+    }
+
     
 
     return(
@@ -228,8 +271,23 @@ function HomeComponent(){
             {redirectToForm()}
             {redirectToLogin()}
             {gotData ? console.log("true") : getChartData()}
+            {gotQuotes ? console.log("true") : fetchQuote()}
             <h1>Welcome {username}!</h1>
+            <h2>Inspirational Quote of the Day</h2>
+            <p id="inspirationalQuote"></p>
+            <p id="inspirationalAuthor"></p>
             <button id="takeForm" onClick={takeSurvey}>Take Form</button>
+
+            {/* <input type="radio" name="colorButtons" value="blue"/>
+            <input type="radio" name="colorButtons" value="red"/>
+            <input type="radio" name="colorButtons" value="green"/>
+            <input type="radio" name="colorButtons" value="purple"/>
+            <input type="radio" name="colorButtons" value="gray" onclick={}/> */}
+            <button id="blueGraph" height="100" width="100" value={[blues]} onClick={e=>setColor(blues)}>Blue</button>
+            <button id="redGraph" height="100" width="100" value={[reds]} onClick={e=>setColor(reds)}>Red</button>
+            <button id="greenGraph" height="100" width="100" value={[greens]} onClick={e=>setColor(greens)}>Green</button>
+            <button id="purpleGraph" height="100" width="100" value={purples} onClick={e=>setColor(purples)}>Purple</button>
+            <button id="grayScoreGraph" height="100" width="100" value={[grays]} onClick={e=>setColor(grays)}>Gray</button>
 
             <Line
                 data={chartScoreState}
@@ -305,7 +363,9 @@ function HomeComponent(){
                     }
                 }}
             />
-
+            <input type="text" id="dailyHighlight"/>
+            <button id="submitHighlight">Enter</button>
+            <div id="highlights" height="400" width="400"></div>
             <button id="logoutButton" onClick={checkLogout}>Logout</button>
         </div>
     )

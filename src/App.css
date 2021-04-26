@@ -65,3 +65,28 @@
   background-color: red;
   border: none;
 }
+
+#blueGraph {
+  background-color: rgb(13, 195, 255);
+  padding: 12px;
+}
+
+#greenGraph {
+  background-color: rgb(60, 179, 113);
+  padding: 12px;
+}
+
+#redGraph {
+  background-color: rgb(255, 0, 0);
+  padding: 12px;
+}
+
+#purpleGraph {
+  background-color: rgb(255, 0, 0);
+  padding: 12px;
+}
+
+#grayGraph {
+  background-color: rgb(180, 180, 180);
+  padding: 12px;
+}
