@@ -68,25 +68,81 @@
 
 #blueGraph {
   background-color: rgb(13, 195, 255);
-  padding: 12px;
+  padding: 20px;
+  border: none;
+  margin-left: 8px;
 }
 
 #greenGraph {
   background-color: rgb(60, 179, 113);
-  padding: 12px;
+  padding: 20px;
+  border: none;
+  margin-left: 8px;
 }
 
 #redGraph {
   background-color: rgb(255, 0, 0);
-  padding: 12px;
+  padding: 20px;
+  border: none;
+  margin-left: 8px;
 }
 
 #purpleGraph {
-  background-color: rgb(255, 0, 0);
-  padding: 12px;
+  background-color: rgb(106, 90, 205);
+  padding: 20px;
+  border: none;
+  margin-left: 8px;
 }
 
 #grayGraph {
   background-color: rgb(180, 180, 180);
-  padding: 12px;
+  padding: 20px;
+  border: none;
+  margin-left: 8px;
+}
+
+.graphs .column {
+  margin: 50px 20px 0px 20px;
+  float: left;
+  width: 50%;
+  text-align: center;
+}
+
+.scoreGraph {
+  margin-top: 50px;
+}
+
+.column {
+  flex: 50%;
+}
+
+.row {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.home {
+  width: 100%;
+}
+
+#submitFormButton {
+  margin-top: 20px;
+  color: white;
+  background-color: rgb(28, 116, 248);
+  border: none;
+}
+
+#takeForm {
+  color: white;
+  background-color: rgb(28, 116, 248);
+  border: none;
+  margin-left: 5px;
+}
+
+#logoutButton {
+  color: white;
+  background-color: rgb(255, 0, 0);
+  border: none;
 }

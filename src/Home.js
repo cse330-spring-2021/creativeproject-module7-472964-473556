@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import {Line, Bar, Pie} from 'react-chartjs-2';
+//import { useStateWithCallbackLazy } from 'use-state-with-callback';
 
 
 function HomeComponent(){
@@ -258,12 +259,34 @@ function HomeComponent(){
         //e.preventDefault();
         console.log(e);
         setColorScheme(e);
-        console.log(colorScheme);
+
+        // // if(colorScheme == e){
+        // //     setChart();
+        // // }
+        // console.log(colorScheme);
+
+        // // setColor2();
         setChart();
 
-        console.log(colorScheme[2].toString());
+
+        // setColorScheme(e, () => {
+        //     setChart();
+        //  });
+
+        // setColorScheme({
+        //     e
+        //   },() => { setChart() })
+
+        //console.log(colorScheme[2].toString());
     }
 
+    // const setColor2 = useCallback(() => {
+    //     // validate based on the CURRENT value of 'memberId'
+    //     // this function gets updated whenever memberId is updated,
+    //     // so we know it will be the most recent id you just set
+    //     console.log("setting again");
+    //     setChart();
+    // }, [colorScheme]);
     
 
     return(
@@ -273,99 +296,112 @@ function HomeComponent(){
             {gotData ? console.log("true") : getChartData()}
             {gotQuotes ? console.log("true") : fetchQuote()}
             <h1>Welcome {username}!</h1>
-            <h2>Inspirational Quote of the Day</h2>
-            <p id="inspirationalQuote"></p>
-            <p id="inspirationalAuthor"></p>
-            <button id="takeForm" onClick={takeSurvey}>Take Form</button>
+            <div id="inspiration">
+                <h2>Inspirational Quote of the Day</h2>
+                <p id="inspirationalQuote"></p>
+                <p id="inspirationalAuthor"></p>
+            </div>
+            <label>Complete daily COVID-19 and mood form: </label><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
+            <p>Results from your last visit:</p>
+            <ul id="formResults"></ul>
+            <div id="colorButtons">
+                <button id="blueGraph" height="100" width="100" value={[blues]} onClick={e=>setColor(blues)}></button>
+                <button id="redGraph" height="100" width="100" value={[reds]} onClick={e=>setColor(reds)}></button>
+                <button id="greenGraph" height="100" width="100" value={[greens]} onClick={e=>setColor(greens)}></button>
+                <button id="purpleGraph" height="100" width="100" value={purples} onClick={e=>setColor(purples)}></button>
+                <button id="grayGraph" height="100" width="100" value={[grays]} onClick={e=>setColor(grays)}></button>
+            </div>
 
-            {/* <input type="radio" name="colorButtons" value="blue"/>
-            <input type="radio" name="colorButtons" value="red"/>
-            <input type="radio" name="colorButtons" value="green"/>
-            <input type="radio" name="colorButtons" value="purple"/>
-            <input type="radio" name="colorButtons" value="gray" onclick={}/> */}
-            <button id="blueGraph" height="100" width="100" value={[blues]} onClick={e=>setColor(blues)}>Blue</button>
-            <button id="redGraph" height="100" width="100" value={[reds]} onClick={e=>setColor(reds)}>Red</button>
-            <button id="greenGraph" height="100" width="100" value={[greens]} onClick={e=>setColor(greens)}>Green</button>
-            <button id="purpleGraph" height="100" width="100" value={purples} onClick={e=>setColor(purples)}>Purple</button>
-            <button id="grayScoreGraph" height="100" width="100" value={[grays]} onClick={e=>setColor(grays)}>Gray</button>
 
-            <Line
-                data={chartScoreState}
-                options={{
-                    title:{
-                    display:true,
-                    text:'Score',
-                    fontSize:20
-                    },
-                    legend:{
-                    display:true,
-                    position:'right'
-                    }
-                }}
-            />
-
-            <Bar
-                data={chartSleepState}
-                options={{
-                    title:{
-                    display:true,
-                    text:'Sleep (hours)',
-                    fontSize:20
-                    },
-                    legend:{
-                    display:true,
-                    position:'right'
-                    }
-                }}
-            />
-
-            <Line
-                data={chartStressState}
-                options={{
-                    title:{
-                    display:true,
-                    text:'Stress',
-                    fontSize:20
-                    },
-                    legend:{
-                    display:true,
-                    position:'right'
-                    }
-                }}
-            />  
-
-            <Pie
-                data={chartMoodState}
-                options={{
-                    title:{
-                    display:true,
-                    text:'Mood',
-                    fontSize:20
-                    },
-                    legend:{
-                    display:true,
-                    position:'right'
-                    }
-                }}
-            />
-
-            <Bar
-                data={chartSymptomsState}
-                options={{
-                    title:{
-                    display:true,
-                    text:'Symptoms',
-                    fontSize:20
-                    },
-                    legend:{
-                    display:true,
-                    position:'right'
-                    }
-                }}
-            />
-            <input type="text" id="dailyHighlight"/>
-            <button id="submitHighlight">Enter</button>
-            <div id="highlights" height="400" width="400"></div>
+            <div className="scoreGraph">
+                <Line
+                    data={chartScoreState}
+                    options={{
+                        title:{
+                        display:true,
+                        text:'Score',
+                        fontSize:20
+                        },
+                        legend:{
+                        display:true,
+                        position:'right'
+                        }
+                    }}
+                    width={50}
+                    height={25}
+                />
+            </div>
+            <div className="graphs">
+                <div className="row">
+                    <div class="column">
+                    <Bar
+                        data={chartSleepState}
+                        options={{
+                            title:{
+                            display:true,
+                            text:'Sleep (hours)',
+                            fontSize:20
+                            },
+                            legend:{
+                            display:true,
+                            position:'right'
+                            }
+                        }}
+                    />
+                    </div>
+                    <div class="column">
+                    <Line
+                        data={chartStressState}
+                        options={{
+                            title:{
+                            display:true,
+                            text:'Stress',
+                            fontSize:20
+                            },
+                            legend:{
+                            display:true,
+                            position:'right'
+                            }
+                        }}
+                    />  
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                    <Pie
+                        data={chartMoodState}
+                        options={{
+                            title:{
+                            display:true,
+                            text:'Mood',
+                            fontSize:20
+                            },
+                            legend:{
+                            display:true,
+                            position:'right'
+                            }
+                        }}
+                    />
+                    </div>
+                    <div class="column">
+                    <Bar
+                        data={chartSymptomsState}
+                        options={{
+                            title:{
+                            display:true,
+                            text:'Symptoms',
+                            fontSize:20
+                            },
+                            legend:{
+                            display:true,
+                            position:'right'
+                            }
+                        }}
+                    />
+                    </div>
+                </div>
+            </div>
+ 
             <button id="logoutButton" onClick={checkLogout}>Logout</button>
         </div>
     )

@@ -168,9 +168,9 @@ function FormComponent() {
                     {/* radio button - mood */}
                     <h3>Mood</h3>
                     <div id="moodItems">
-                      <input type="radio" name="moodInput" id="happy" value="25" required="required" onChange={e=>setMood(e.target.value)}/><label htmlFor="happy"><img src={happy} alt="Happy" height="100" width="100"/></label> &nbsp;
-                      <input type="radio" name="moodInput" id="sad" value="7" onChange={e=>setMood(e.target.value)}/><label htmlFor="sad"><img src={sad} alt="Sad" height="100" width="100"/></label> &nbsp;
-                      <input type="radio" name="moodInput" id="okay" value="19" onChange={e=>setMood(e.target.value)}/><label htmlFor="okay"><img src={okay} alt="Okay" height="100" width="100"/></label> &nbsp;
+                      <input type="radio" name="moodInput" id="happy" value="25" required="required" onChange={e=>setMood(e.target.value)}/><label htmlFor="happy"><img src={happy} alt="Happy" height="100" width="120"/></label> &nbsp;
+                      <input type="radio" name="moodInput" id="sad" value="7" onChange={e=>setMood(e.target.value)}/><label htmlFor="sad"><img src={sad} alt="Sad" height="80" width="80"/></label> &nbsp;
+                      <input type="radio" name="moodInput" id="okay" value="19" onChange={e=>setMood(e.target.value)}/><label htmlFor="okay"><img src={okay} alt="Okay" height="80" width="80"/></label> &nbsp;
                       <input type="radio" name="moodInput" id="tired" value="9" onChange={e=>setMood(e.target.value)}/><label htmlFor="tired"><img src={tired} alt="Tired" height="100" width="100"/></label>
                     </div>
                     
