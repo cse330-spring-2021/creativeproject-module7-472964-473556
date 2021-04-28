@@ -1,11 +1,14 @@
 import React, { useState} from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import SimpleReactValidator from 'simple-react-validator';
  
 
 function LoginComponent() {
 
     const [redirect, setRedirect] = useState(false);
+
+    let validator = new SimpleReactValidator();
 
     var loggedInUser;
     try{
@@ -39,7 +42,6 @@ function LoginComponent() {
                 setUser(data.username)
                 // store the user in localStorage
                 localStorage.setItem('user', data.username);
-                console.log(user);
                 console.log("hi");
                 console.log("Successful Login: ", data.username);
 
@@ -54,8 +56,8 @@ function LoginComponent() {
             console.error(err);
         });
 
-        document.getElementById("newUsername").innerHTML = "";
-        document.getElementById("newPassword").innerHTML = "";
+        document.getElementById("newusername").innerHTML = "";
+        document.getElementById("newpassword").innerHTML = "";
     };
 
     const login = (e) => {
@@ -102,19 +104,27 @@ function LoginComponent() {
             <form onSubmit={login} method='POST'>
                 <div className = "existingUser">
     
-                    <input type="text" id="username" value={username} onChange={e=>setUsername(e.target.value)} placeholder="Username"/>
-                    <input type="password" id="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
+                    <input type="text" id="username" required value={username} onChange={e=>setUsername(e.target.value)} placeholder="Username"/>
+                    <input type="password" id="password" required value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
                     <input type="submit" id="existingUserLogin" value="Login"/>
                     {/* login button will fetch in different component --> go to home if logged in */}
+
+                    {/* validating input form code */}
+                    {validator.message('username', {username}, 'required')}
+                    {validator.message('password',{password}, 'required')}
                 </div>
             </form>
 
             <form onSubmit={register} method="POST">
                 <div className = "newUser">
                     <label htmlFor="newusername">Don't have an account?</label>
-                    <input type="text" id="newusername" value={newUsername} onChange={e=>setNewUsername(e.target.value)} placeholder="Username" />
-                    <input type="password" id="newpassword" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="Password"/>
+                    <input type="text" id="newusername" required value={newUsername} onChange={e=>setNewUsername(e.target.value)} placeholder="Username" />
+                    <input type="password" id="newpassword" required value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="Password"/>
                     <input type="submit" id="newUserButton" value ="Create!"/>
+
+                    {/* validating input form code */}
+                    {validator.message('newusername', {newUsername}, 'required')}
+                    {validator.message('newpassword', {newPassword}, 'required')}
                 </div>
             </form>
         </div>
