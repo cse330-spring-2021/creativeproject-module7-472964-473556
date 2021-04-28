@@ -1,5 +1,18 @@
-.App {
+/* .App {
   text-align: center;
+} */
+
+
+.Home {
+  text-align: left;
+}
+
+#welcomeHeader, .Login {
+  text-align: center;
+}
+
+#inspirationalAuthor {
+  margin-left: 5px;
 }
 .App-header {
   min-height: 100vh;

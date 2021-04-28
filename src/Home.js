@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import {Line, Bar, Pie} from 'react-chartjs-2';
@@ -82,7 +82,7 @@ function HomeComponent(){
 
 
                     let symptoms = document.getElementById("symptomsResults");
-                    let symptomsScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    let symptomsScore = chartData[0]["symptoms"][chartData[0]["score"].length - 1];
                     if(symptomsScore == 25){
                         symptoms.innerHTML = "You had no symptoms: get some exercise if you're feeling up to it";
                     }
@@ -104,7 +104,7 @@ function HomeComponent(){
 
 
                     let stress = document.getElementById("stressResults");
-                    let stressScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    let stressScore = chartData[0]["stress"][chartData[0]["score"].length - 1];
                     if(stressScore == 25){
                         stress.innerHTML = "You weren't stressed: keep up the good work!";
                     }
@@ -123,7 +123,7 @@ function HomeComponent(){
 
 
                     let sleep = document.getElementById("sleepResults");
-                    let sleepScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    let sleepScore = chartData[0]["sleep"][chartData[0]["score"].length - 1];
                     if(sleepScore == 25){
                         sleep.innerHTML = "You got 7-9 hours of sleep: way to go!";
                     }
@@ -141,7 +141,7 @@ function HomeComponent(){
                     }
 
                     document.getElementById("inspirationalQuote").innerHTML = quote;
-                    document.getElementById("inspirationalAuthor").innerHTML = "-" + author;
+                    document.getElementById("inspirationalAuthor").innerHTML = " - " + author;
                     setQuotes(true);
                 }
                 
@@ -154,6 +154,7 @@ function HomeComponent(){
         
     }
 
+ 
 
     const getChartData = () => {
         console.log("in chart data");
@@ -163,19 +164,21 @@ function HomeComponent(){
         })
         .then(response => response.data)
         .then(data => {
-            if(data.username = username) {
+            console.log(data);
+            console.log(username);
+            if(data[0].username == username) {
                 console.log(data);
                 setChartData(data);
                 //console.log(chartData[0]["score"]); LOOK INTO
-                console.log(chartData);
-                if(chartData[0]["score"].length == 0){
-                    document.getElementById("userData").style.display = "none";
-                }
-                else{
-                    document.getElementById("userData").style.display = "block";
-                }
-                setGotData(true);
-                setChart();
+                // console.log(chartData);
+                // if(chartData[0]["score"].length == 0){
+                //     document.getElementById("userData").style.display = "none";
+                // }
+                // else{
+                //     document.getElementById("userData").style.display = "block";
+                // }
+                // setGotData(true);
+                // //setChart();
             }
             else {
                 console.log("error in getting chart data")
@@ -187,7 +190,7 @@ function HomeComponent(){
     }
 
     const setChart = () => {
-        if(chartData != {}){
+        if(chartData[0]){
             let scoreLabels = [];
             let count_1 = 0; //0-3
             let count_2 = 0; //4-6
@@ -311,12 +314,12 @@ function HomeComponent(){
                   {
                     label: 'Rainfall',
                     backgroundColor: colorScheme,
-                    hoverBackgroundColor: [
-                    '#501800',
-                    '#4B5000',
-                    '#175000',
-                    '#003350'
-                    ],
+                    // hoverBackgroundColor: [
+                    // '#501800',
+                    // '#4B5000',
+                    // '#175000',
+                    // '#003350'
+                    // ],
                     data: [happy_count, sad_count, tired_count, okay_count]
                   }
                 ]
@@ -336,54 +339,54 @@ function HomeComponent(){
             })
         }
     }
+    useEffect (() => {
+        if(chartData[0]) {
+            console.log("In use effect: ", chartData);
+            if(chartData[0]["score"].length == 0){
+                document.getElementById("userData").style.display = "none";
+            }
+            else{
+                document.getElementById("userData").style.display = "block";
+            }
+            setGotData(true);
+            setChart();
+
+        }
+        
+    }, [chartData])
+
+    useEffect ( () => {
+        setChart();      
+    }, [colorScheme])
+
+    useEffect( () => {
+        console.log("Use effect: get chart data");
+        gotData ? console.log("true") : getChartData();
+    }, [])
+
+// https://codeburst.io/how-to-use-html5-form-validations-with-react-4052eda9a1d4
 
     const setColor = (e) => {
         //e.preventDefault();
         console.log(e);
         setColorScheme(e);
-
-        // // if(colorScheme == e){
-        // //     setChart();
-        // // }
-        // console.log(colorScheme);
-
-        // // setColor2();
-        setChart();
-
-
-        // setColorScheme(e, () => {
-        //     setChart();
-        //  });
-
-        // setColorScheme({
-        //     e
-        //   },() => { setChart() })
-
-        //console.log(colorScheme[2].toString());
     }
-
-    // const setColor2 = useCallback(() => {
-    //     // validate based on the CURRENT value of 'memberId'
-    //     // this function gets updated whenever memberId is updated,
-    //     // so we know it will be the most recent id you just set
-    //     console.log("setting again");
-    //     setChart();
-    // }, [colorScheme]);
-    
 
     return(
         <div className="home">
             {redirectToForm()}
-            {redirectToLogin()}
-            {gotData ? console.log("true") : getChartData()}
+            {redirectToLogin()} 
+            {/* {gotData ? console.log("true") : getChartData()} */}
             {gotQuotes ? console.log("true") : fetchQuote()}
+            <div id="welcomeHeader">
             <h1>Welcome {username}!</h1>
-            <div id="inspiration">
-                <h2>Inspirational Quote of the Day</h2>
-                <p id="inspirationalQuote">Quote</p>
-                <p id="inspirationalAuthor">Author</p>
+                <div id="inspiration">
+                    <h2>Inspirational Quote of the Day</h2>
+                    <em><p id="inspirationalQuote">Quote</p>
+                    <p id="inspirationalAuthor">Author</p></em>
+                </div>
+                <label>Complete daily COVID-19 and mood form </label><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
             </div>
-            <label>Complete daily COVID-19 and mood form: </label><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
             <div id="userData">
                 <p>Results from your last survey:</p>
                 <label>Score: </label>
