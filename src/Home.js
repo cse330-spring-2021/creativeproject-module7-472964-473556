@@ -62,10 +62,86 @@ function HomeComponent(){
                 if(chartData[0] && inspirationalQuotes[chartData[0]["score"].length]){
                     let quote = inspirationalQuotes[chartData[0]["score"].length]["text"];
                     let author = inspirationalQuotes[chartData[0]["score"].length]["author"];
-                    console.log(quote);
+
+                    let score = document.getElementById("scoreLabel");
+                    score.innerHTML = chartData[0]["score"][chartData[0]["score"].length - 1] + "&#37;";
+                    let mood = document.getElementById("moodResults");
+                    let moodScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    if(moodScore == 25){
+                        mood.innerHTML = "You were happy: spread the joy!";
+                    }
+                    else if(moodScore == 7){
+                        mood.innerHTML = "You were sad: don't be sad because sad backwards is das, and das not good!";
+                    }
+                    else if(moodScore == 19){
+                        mood.innerHTML = "You were okay: a smile can make your day brighter!";
+                    }
+                    else{
+                        mood.innerHTML = "You were tired: take a nap and catch up on some sleep!";
+                    }
+
+
+                    let symptoms = document.getElementById("symptomsResults");
+                    let symptomsScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    if(symptomsScore == 25){
+                        symptoms.innerHTML = "You had no symptoms: get some exercise if you're feeling up to it";
+                    }
+                    else if(symptomsScore == 19){
+                        symptoms.innerHTML = "You had one symptom: wash your hands and mask up!";
+                    }
+                    else if(symptomsScore == 16){
+                        symptoms.innerHTML = "You had two symptoms: make sure to hydrate!";
+                    }
+                    else if(symptomsScore == 11){
+                        symptoms.innerHTML = "You had three symptoms: stay in bed and have some soup!";
+                    }
+                    else if(symptomsScore == 2){
+                        symptoms.innerHTML = "You had one symptom: have you tried DayQuil?";
+                    }
+                    else{
+                        symptoms.innerHTML = "You had five symptoms: maybe it is time to see a doctor";
+                    }
+
+
+                    let stress = document.getElementById("stressResults");
+                    let stressScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    if(stressScore == 25){
+                        stress.innerHTML = "You weren't stressed: keep up the good work!";
+                    }
+                    else if(stressScore == 17){
+                        stress.innerHTML = "You were a little stressed: take time out of your day to take care of YOU";
+                    }
+                    else if(stressScore == 12){
+                        stress.innerHTML = "You were moderately stressed: try taking three deep breaths";
+                    }
+                    else if(stressScore == 6){
+                        stress.innerHTML = "You were very stressed: treat yourself!";
+                    }
+                    else{
+                        stress.innerHTML = "You were extremely stressed: maybe you should talk to someone about how you are feeling";
+                    }
+
+
+                    let sleep = document.getElementById("sleepResults");
+                    let sleepScore = chartData[0]["mood"][chartData[0]["score"].length - 1];
+                    if(sleepScore == 25){
+                        sleep.innerHTML = "You got 7-9 hours of sleep: way to go!";
+                    }
+                    else if(sleepScore == 24){
+                        sleep.innerHTML = "You got 10-12 hours of sleep: you should be ready to take on the day!";
+                    }
+                    else if(sleepScore == 15){
+                        sleep.innerHTML = "You got 13+ hours of sleep: too much is never enough";
+                    }
+                    else if(sleepScore == 14){
+                        sleep.innerHTML = "You got 4-6 hours of sleep: try going to bed earlier tonight";
+                    }
+                    else{
+                        sleep.innerHTML = "You got 0-3 hours of sleep: make sleep your priority";
+                    }
+
                     document.getElementById("inspirationalQuote").innerHTML = quote;
                     document.getElementById("inspirationalAuthor").innerHTML = "-" + author;
-                    console.log("author",author);
                     setQuotes(true);
                 }
                 
@@ -92,6 +168,12 @@ function HomeComponent(){
                 setChartData(data);
                 //console.log(chartData[0]["score"]); LOOK INTO
                 console.log(chartData);
+                if(chartData[0]["score"].length == 0){
+                    document.getElementById("userData").style.display = "none";
+                }
+                else{
+                    document.getElementById("userData").style.display = "block";
+                }
                 setGotData(true);
                 setChart();
             }
@@ -298,82 +380,37 @@ function HomeComponent(){
             <h1>Welcome {username}!</h1>
             <div id="inspiration">
                 <h2>Inspirational Quote of the Day</h2>
-                <p id="inspirationalQuote"></p>
-                <p id="inspirationalAuthor"></p>
+                <p id="inspirationalQuote">Quote</p>
+                <p id="inspirationalAuthor">Author</p>
             </div>
             <label>Complete daily COVID-19 and mood form: </label><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
-            <p>Results from your last visit:</p>
-            <ul id="formResults"></ul>
-            <div id="colorButtons">
-                <button id="blueGraph" height="100" width="100" value={[blues]} onClick={e=>setColor(blues)}></button>
-                <button id="redGraph" height="100" width="100" value={[reds]} onClick={e=>setColor(reds)}></button>
-                <button id="greenGraph" height="100" width="100" value={[greens]} onClick={e=>setColor(greens)}></button>
-                <button id="purpleGraph" height="100" width="100" value={purples} onClick={e=>setColor(purples)}></button>
-                <button id="grayGraph" height="100" width="100" value={[grays]} onClick={e=>setColor(grays)}></button>
-            </div>
-
-
-            <div className="scoreGraph">
-                <Line
-                    data={chartScoreState}
-                    options={{
-                        title:{
-                        display:true,
-                        text:'Score',
-                        fontSize:20
-                        },
-                        legend:{
-                        display:true,
-                        position:'right'
-                        }
-                    }}
-                    width={50}
-                    height={25}
-                />
-            </div>
-            <div className="graphs">
-                <div className="row">
-                    <div class="column">
-                    <Bar
-                        data={chartSleepState}
-                        options={{
-                            title:{
-                            display:true,
-                            text:'Sleep (hours)',
-                            fontSize:20
-                            },
-                            legend:{
-                            display:true,
-                            position:'right'
-                            }
-                        }}
-                    />
-                    </div>
-                    <div class="column">
-                    <Line
-                        data={chartStressState}
-                        options={{
-                            title:{
-                            display:true,
-                            text:'Stress',
-                            fontSize:20
-                            },
-                            legend:{
-                            display:true,
-                            position:'right'
-                            }
-                        }}
-                    />  
-                    </div>
+            <div id="userData">
+                <p>Results from your last survey:</p>
+                <label>Score: </label>
+                <label id="scoreLabel">the actual percent</label>
+                <p><strong>Your ~mental~ breakdown:</strong></p>
+                <ul id="formResults">
+                    <li id="moodResults">Mood</li>
+                    <li id="symptomsResults">Symptoms</li>
+                    <li id="stressResults">Stress</li>
+                    <li id="sleepResults">Sleep</li>
+                </ul>
+                <div id="colorButtons">
+                    <button id="blueGraph" height="100" width="100" value={[blues]} onClick={e=>setColor(blues)}></button>
+                    <button id="redGraph" height="100" width="100" value={[reds]} onClick={e=>setColor(reds)}></button>
+                    <button id="greenGraph" height="100" width="100" value={[greens]} onClick={e=>setColor(greens)}></button>
+                    <button id="purpleGraph" height="100" width="100" value={purples} onClick={e=>setColor(purples)}></button>
+                    <button id="grayGraph" height="100" width="100" value={[grays]} onClick={e=>setColor(grays)}></button>
                 </div>
-                <div class="row">
-                    <div class="column">
-                    <Pie
-                        data={chartMoodState}
+
+
+                <div className="scoreGraph">
+                    <Line
+                        data={chartScoreState}
                         options={{
                             title:{
                             display:true,
-                            text:'Mood',
+                            text:'Score',
                             fontSize:20
                             },
                             legend:{
@@ -381,27 +418,83 @@ function HomeComponent(){
                             position:'right'
                             }
                         }}
+                        width={50}
+                        height={25}
                     />
+                </div>
+                <div className="graphs">
+                    <div className="row">
+                        <div class="column">
+                        <Bar
+                            data={chartSleepState}
+                            options={{
+                                title:{
+                                display:true,
+                                text:'Sleep (hours)',
+                                fontSize:20
+                                },
+                                legend:{
+                                display:true,
+                                position:'right'
+                                }
+                            }}
+                        />
+                        </div>
+                        <div class="column">
+                        <Line
+                            data={chartStressState}
+                            options={{
+                                title:{
+                                display:true,
+                                text:'Stress',
+                                fontSize:20
+                                },
+                                legend:{
+                                display:true,
+                                position:'right'
+                                }
+                            }}
+                        />  
+                        </div>
                     </div>
-                    <div class="column">
-                    <Bar
-                        data={chartSymptomsState}
-                        options={{
-                            title:{
-                            display:true,
-                            text:'Symptoms',
-                            fontSize:20
-                            },
-                            legend:{
-                            display:true,
-                            position:'right'
-                            }
-                        }}
-                    />
+                    <div class="row">
+                        <div class="column">
+                        <Pie
+                            data={chartMoodState}
+                            options={{
+                                title:{
+                                display:true,
+                                text:'Mood',
+                                fontSize:20
+                                },
+                                legend:{
+                                display:true,
+                                position:'right'
+                                }
+                            }}
+                        />
+                        </div>
+                        <div class="column">
+                        <Bar
+                            data={chartSymptomsState}
+                            options={{
+                                title:{
+                                display:true,
+                                text:'Symptoms',
+                                fontSize:20
+                                },
+                                legend:{
+                                display:true,
+                                position:'right'
+                                }
+                            }}
+                        />
+                        </div>
                     </div>
                 </div>
             </div>
  
+            <br></br>
             <button id="logoutButton" onClick={checkLogout}>Logout</button>
         </div>
     )

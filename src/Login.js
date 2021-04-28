@@ -1,19 +1,9 @@
-// import React from 'react'
 import React, { useState} from 'react';
 import axios from 'axios';
-// import { useHistory } from "react-router-dom";
 import { Redirect } from 'react-router-dom';
  
 
-    //     <div className = "newUser">
-    //     <label for="newusername">Don't have an account?</label>
-    //     <input type="text" id="newusername" placeholder="Username" />
-    //     <input type="password" id="newpassword" placeholder="Password"/>
-    //     <button id="newUserButton">Create!</button>
-    // </div>
-            
 function LoginComponent() {
-    //const history = useHistory();
 
     const [redirect, setRedirect] = useState(false);
 
@@ -37,21 +27,6 @@ function LoginComponent() {
 
     const [user, setUser] = useState();
 
-    
-    
-    // handleLogin = e => {
-    //     e.preventDefault();
-    //     let url = "http://localhost:3000/login"
-    //     let formData = new FormData();
-    //     formData.append('username', username);
-    //     formData.append('password', password);
-
-    //     fetch(url, {
-    //         method: 'POST',
-    //         body: formData
-    //     })
-
-    // }
     const register= (e) => {
         e.preventDefault();
         axios.post("http://localhost:5000/register", {
@@ -78,6 +53,9 @@ function LoginComponent() {
         .catch(err => {
             console.error(err);
         });
+
+        document.getElementById("newUsername").innerHTML = "";
+        document.getElementById("newPassword").innerHTML = "";
     };
 
     const login = (e) => {
@@ -89,13 +67,12 @@ function LoginComponent() {
         .then(response => response.data)
         .then(data => {
             if(data.success) {
-                  // set the state of the user
+                // set the state of the user
                 setUser(data.username);
                 // store the user in localStorage
                 localStorage.setItem('user', data.username);
                 console.log("hi");
                 console.log("Successful Login: ", data.username);
-                //history.push("/");
                 setRedirect(true);
             }
             else {
@@ -106,7 +83,8 @@ function LoginComponent() {
             console.error(err);
         });
 
-
+        document.getElementById("username").innerHTML = "";
+        document.getElementById("password").innerHTML = "";
     };
 
     const renderRedirect = () => {
