@@ -1,4 +1,4 @@
-// import logo from './logo.svg';
+
 import './App.css';
 import Form from './Form';
 import Login from './Login';
@@ -10,8 +10,7 @@ import { Redirect } from 'react-router-dom';
 
 function App() {
 
-  //const [loggedInUser, setLoggedInUser] = useState(""); 
-
+  /* checks if a user is logged in */
   var loggedInUser;
   try{
     loggedInUser = localStorage.getItem("user");
@@ -19,22 +18,7 @@ function App() {
   catch(err){
     loggedInUser = null;
   }
-  
-  
-  // return(
-  //   <div className="App">
-  //       <header className="App-header">
-          
-  //         <Login/>
-  //         {/* <Redirect from="/login" to="/home" /> */}
-  //         {/* <Home/> */}
-
-  //       </header>
-  //     </div>
-  // )
-
-  
-  
+  /* if a user is logged in, go to home page */
     if (loggedInUser) {
       return(
         <div className="App">
@@ -47,7 +31,7 @@ function App() {
       )
     }
     else{
-      // localStorage.clear();
+  /* if a user is not logged in, go to login page */
       return(
         <div className="App">
           <header className="App-header">

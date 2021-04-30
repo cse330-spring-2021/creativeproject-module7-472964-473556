@@ -10,6 +10,15 @@
 #welcomeHeader, .Login {
   text-align: center;
 }
+#scoreLabel {
+  text-align: center;
+  font-size: 60px;
+  color: palevioletred;
+}
+
+#goToForm {
+  font-size: 30px;
+}
 
 #inspirationalAuthor {
   margin-left: 5px;
@@ -22,6 +31,22 @@
   justify-content: center;
   line-height: 1.8;
   font-size: calc(10px + 2vmin);
+}
+
+#submitButton {
+  text-align: center;
+}
+
+#symptomItems input{
+  margin-right: 4px;
+}
+
+#symptomItems label{
+  margin-right: 10px;
+}
+
+#moodItems {
+  text-align:center;
 }
 #username,
 #password,
@@ -77,6 +102,10 @@
   color: white;
   background-color: red;
   border: none;
+}
+
+#colorButtons {
+  text-align: center;
 }
 
 #blueGraph {
@@ -147,7 +176,7 @@
   border: none;
 }
 
-#takeForm {
+#takeForm, #existingUserLogin, #newUserButton {
   color: white;
   background-color: rgb(28, 116, 248);
   border: none;
@@ -158,8 +187,29 @@
   color: white;
   background-color: rgb(255, 0, 0);
   border: none;
+  margin-bottom: 20px;
 }
 
 #formResults {
   text-align: left;
+}
+
+#homeWelcome {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  font-size: 40px;
+}
+
+#sadImage, #okayImage {
+  margin-bottom: 7px;
+}
+
+.stress {
+  font-size: 16px;
+}
+
+#moderateStress {
+  text-align: center;
+  margin-right: 37%;
+  margin-left: 37%;
 }

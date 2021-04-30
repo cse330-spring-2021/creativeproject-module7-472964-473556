@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import {Line, Bar, Pie} from 'react-chartjs-2';
-//import { useStateWithCallbackLazy } from 'use-state-with-callback';
 
 
+/* Home Component displays the page containing user data and ability to go take form */
 function HomeComponent(){
+
+    /* setting states for global use */
     let username = localStorage.getItem("user");
     const [redirectForm, setRedirectForm] = useState(false);
     const [redirectLogin, setRedirectLogin] = useState(false);
@@ -16,10 +18,10 @@ function HomeComponent(){
     const [chartStressState, setStressChartState] = useState({});
     const [chartMoodState, setMoodChartState] = useState({});
     const [chartSymptomsState, setSymptomsChartState] = useState({});
-
     const [inspirationalQuotes, setInspirationQuotes] = useState({});
     const [gotQuotes, setQuotes] = useState(false);
 
+    /* setting color schemes */
     let blues = ["rgb(13, 0, 132)", "rgb(13, 89, 231)", "rgb(13, 195, 255)", "rgb(0, 0, 255)"];
     let greens = ["rgb(60, 179, 113)", "rgb(0, 117, 96)", "rgb(131, 250, 182)", "rgb(0, 80, 0)"];
     let reds = ["rgb(255, 0, 0)", "rgb(151, 0, 0)", "rgb(255, 117, 122)", "rgb(255, 158, 190)"];
@@ -28,23 +30,22 @@ function HomeComponent(){
 
     const [colorScheme, setColorScheme] = useState(grays);
     
-
+    /* check if user clicks survey button */
     const takeSurvey = () => {
-        console.log("hello");
         setRedirectForm(true);
     }
-
+    
+    /* check if user logs out */
     const checkLogout = () => {
-        console.log("hello");
         setRedirectLogin(true);
     }
-
+    /* redirect to survey */
     const redirectToForm = () => {
         if(redirectForm){
             return <Redirect to='/form' />
         }
     }
-
+    /*redirect to login page */
     const redirectToLogin = () => {
         if(redirectLogin){
             localStorage.clear();
@@ -52,17 +53,18 @@ function HomeComponent(){
         }
     }
 
+    /* fetching quote from api and displaying on the home page */
     const fetchQuote = () => {
         axios.get("https://type.fit/api/quotes")
         .then((response) => {
             setInspirationQuotes(response.data);
-            console.log("fetching quote", inspirationalQuotes);
             
             if(chartData != {} && chartData != null){
                 if(chartData[0] && inspirationalQuotes[chartData[0]["score"].length]){
                     let quote = inspirationalQuotes[chartData[0]["score"].length]["text"];
                     let author = inspirationalQuotes[chartData[0]["score"].length]["author"];
 
+                    /* displays suggestions based on input data */
                     let score = document.getElementById("scoreLabel");
                     score.innerHTML = chartData[0]["score"][chartData[0]["score"].length - 1] + "&#37;";
                     let mood = document.getElementById("moodResults");
@@ -147,7 +149,7 @@ function HomeComponent(){
                 
             }
             else{
-                console.log("chart data not defined");
+                console.log("Error: data does not exist");
             }
 
         });
@@ -157,8 +159,8 @@ function HomeComponent(){
  
 
     const getChartData = () => {
-        console.log("in chart data");
-        console.log("getting data");
+        
+        /* getting data from server */
         axios.post("http://localhost:5000/get_data", {
         'username' : username
         })
@@ -169,19 +171,9 @@ function HomeComponent(){
             if(data[0].username == username) {
                 console.log(data);
                 setChartData(data);
-                //console.log(chartData[0]["score"]); LOOK INTO
-                // console.log(chartData);
-                // if(chartData[0]["score"].length == 0){
-                //     document.getElementById("userData").style.display = "none";
-                // }
-                // else{
-                //     document.getElementById("userData").style.display = "block";
-                // }
-                // setGotData(true);
-                // //setChart();
             }
             else {
-                console.log("error in getting chart data")
+                console.log("Error: data not retrieved")
             }
         })
         .catch(err => {
@@ -189,6 +181,7 @@ function HomeComponent(){
         });
     }
 
+    /* building charts based on retrieved data */
     const setChart = () => {
         if(chartData[0]){
             let scoreLabels = [];
@@ -314,12 +307,6 @@ function HomeComponent(){
                   {
                     label: 'Rainfall',
                     backgroundColor: colorScheme,
-                    // hoverBackgroundColor: [
-                    // '#501800',
-                    // '#4B5000',
-                    // '#175000',
-                    // '#003350'
-                    // ],
                     data: [happy_count, sad_count, tired_count, okay_count]
                   }
                 ]
@@ -339,9 +326,10 @@ function HomeComponent(){
             })
         }
     }
+
+    /* on page load, displaying data */
     useEffect (() => {
         if(chartData[0]) {
-            console.log("In use effect: ", chartData);
             if(chartData[0]["score"].length == 0){
                 document.getElementById("userData").style.display = "none";
             }
@@ -355,20 +343,18 @@ function HomeComponent(){
         
     }, [chartData])
 
+    /* setting color schemes upon button click */
     useEffect ( () => {
         setChart();      
     }, [colorScheme])
 
+    /* on page load, getting data */
     useEffect( () => {
-        console.log("Use effect: get chart data");
         gotData ? console.log("true") : getChartData();
     }, [])
 
-// https://codeburst.io/how-to-use-html5-form-validations-with-react-4052eda9a1d4
-
+    /* setting color scheme */
     const setColor = (e) => {
-        //e.preventDefault();
-        console.log(e);
         setColorScheme(e);
     }
 
@@ -376,22 +362,22 @@ function HomeComponent(){
         <div className="home">
             {redirectToForm()}
             {redirectToLogin()} 
-            {/* {gotData ? console.log("true") : getChartData()} */}
             {gotQuotes ? console.log("true") : fetchQuote()}
             <div id="welcomeHeader">
-            <h1>Welcome {username}!</h1>
+            <h1 id="homeWelcome">Welcome {username}!</h1>
                 <div id="inspiration">
                     <h2>Inspirational Quote of the Day</h2>
                     <em><p id="inspirationalQuote">Quote</p>
                     <p id="inspirationalAuthor">Author</p></em>
                 </div>
-                <label>Complete daily COVID-19 and mood form </label><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
+                <hr></hr>
+                <strong><label id="goToForm">Complete Daily Survey</label></strong><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
             </div>
             <div id="userData">
-                <p>Results from your last survey:</p>
-                <label>Score: </label>
-                <label id="scoreLabel">the actual percent</label>
-                <p><strong>Your ~mental~ breakdown:</strong></p>
+            
+                <label><strong>You're feeling . . . </strong></label>
+                <strong><p id="scoreLabel"></p></strong>
+                <p><strong>Your Mental Breakdown . . . </strong></p>
                 <ul id="formResults">
                     <li id="moodResults">Mood</li>
                     <li id="symptomsResults">Symptoms</li>

@@ -4,7 +4,6 @@ import db
 from flask_bcrypt import Bcrypt
 from bson.json_util import dumps, loads
 
-#https://exploreflask.com/en/latest/forms.html
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
@@ -12,12 +11,12 @@ bcrypt = Bcrypt(app)
 def hello_world():
     return 'Hello, World!'
 
+# handles new account user data 
 @app.route('/register', methods=['POST'])
 def handle_new_user():
     username = request.json['username'] 
     password = request.json['password']
     pw_hash = bcrypt.generate_password_hash(password)
-    # bcrypt.check_password_hash(pw_hash, 'hunter2') # returns True
 
     query = db.user_collection.find({"username": username}).count()
     
@@ -30,9 +29,11 @@ def handle_new_user():
         'username': username,
         'success': True
     }  
+
     db.user_collection.insert({"username": username, "password": pw_hash, "mood": [], "symptoms": [], "stress": [], "sleep" : [], "score" : []})
     return jsonify(loginInfo)
 
+# handles existing user data 
 @app.route('/login', methods=["POST"])
 def handle_login():
     username = request.json['username'] 
@@ -54,7 +55,7 @@ def handle_login():
     }
     return jsonify(loginInfo)
 
-
+# handles data from survey
 @app.route('/form', methods=["POST"])
 def handle_submit_form():
     mood = request.json['mood'] 
@@ -105,7 +106,7 @@ def handle_submit_form():
     }
     return jsonify(submitInfo)
 
-
+# gets data from survey
 @app.route('/get_data', methods=["POST"])
 def handle_chart_data():
     username = request.json['username']

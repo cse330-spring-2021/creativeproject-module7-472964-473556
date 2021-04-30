@@ -6,10 +6,13 @@ import SimpleReactValidator from 'simple-react-validator';
 
 function LoginComponent() {
 
+    /* redirect functionality */
     const [redirect, setRedirect] = useState(false);
 
+    /* code validation */
     let validator = new SimpleReactValidator();
 
+    /* checks if a user is logged in */
     var loggedInUser;
     try{
       loggedInUser = localStorage.getItem("user");
@@ -23,13 +26,14 @@ function LoginComponent() {
             return <Redirect to='/' />
         }
     }
+    /* sets states for global use */
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [newUsername, setNewUsername] = useState("");
     const [newPassword, setNewPassword] = useState("");
-
     const [user, setUser] = useState();
 
+    /* sends info to server upon new account creation */
     const register= (e) => {
         e.preventDefault();
         axios.post("http://localhost:5000/register", {
@@ -42,9 +46,6 @@ function LoginComponent() {
                 setUser(data.username)
                 // store the user in localStorage
                 localStorage.setItem('user', data.username);
-                console.log("hi");
-                console.log("Successful Login: ", data.username);
-
                 setRedirect(true);
             
             }
@@ -60,6 +61,7 @@ function LoginComponent() {
         document.getElementById("newpassword").innerHTML = "";
     };
 
+    /* sends login info to server */
     const login = (e) => {
         e.preventDefault();
         axios.post("http://localhost:5000/login", {
@@ -89,25 +91,25 @@ function LoginComponent() {
         document.getElementById("password").innerHTML = "";
     };
 
+    /* redirect to home page */
     const renderRedirect = () => {
         if (redirect) {
           return <Redirect to='/' />
         }
       }
 
-
     return (
         <div className="Login">
             {checkLoggedIn()}
             {renderRedirect()}
-            <h1>Login:</h1>
+            <h1>Welcome!</h1>
+            <h2>Login to Health Portal:</h2>
             <form onSubmit={login} method='POST'>
                 <div className = "existingUser">
     
                     <input type="text" id="username" required value={username} onChange={e=>setUsername(e.target.value)} placeholder="Username"/>
                     <input type="password" id="password" required value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
                     <input type="submit" id="existingUserLogin" value="Login"/>
-                    {/* login button will fetch in different component --> go to home if logged in */}
 
                     {/* validating input form code */}
                     {validator.message('username', {username}, 'required')}

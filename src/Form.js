@@ -15,10 +15,13 @@ import { Redirect } from 'react-router-dom';
 
 
 function FormComponent() {
+    /* sets states for global use */
     const [mood, setMood] = useState("");
     const [stress, setStress] = useState({value: 1});
     const [sleep, setSleep] = useState(1);
+    const [redirect, setRedirect] = useState(false);
 
+    /* set dropdown options */
     const sleepOptions = [
       {
         text: '0-3',
@@ -47,26 +50,22 @@ function FormComponent() {
       },
     ]
 
-    const [redirect, setRedirect] = useState(false);
-
+    
+    /* sends survey data to server */
     const sendForm = (e) => {
       e.preventDefault();
 
-      console.log(e.target);
       let symptoms = document.getElementsByName("symptoms");
-      console.log(symptoms);
       let symptomsLength = symptoms.length;
-      console.log(symptomsLength);
       let symptomsCount = 0;
     
       for(let i = 0; i < symptomsLength; i += 1){
           if(symptoms[i].checked){
-              console.log(symptoms[i].id);
               symptomsCount += 1;
           }
-          console.log(symptoms[i]);
       }
-
+      /* encodes survey results to plot and calculate score */
+      
       if(symptomsCount == 5){
         symptomsCount = 0;
       }
@@ -103,12 +102,7 @@ function FormComponent() {
         stressVal = 25;
       }
 
-      console.log("mood ", mood);
-      console.log("symptoms, ", symptomsCount);
-      console.log("stress", stressVal);
-      console.log("sleep ", sleep);
       let username = localStorage.getItem("user");
-      console.log(username + "= username");
 
       let total = Number(mood) + Number(stressVal) + Number(symptomsCount) + Number(sleep);
       console.log(total);
@@ -124,13 +118,7 @@ function FormComponent() {
       .then(response => response.data)
       .then(data => {
           if(data.success) {
-                // set the state of the user
-              //setUser(data)
-              // store the user in localStorage
-              //localStorage.setItem('user', data)
-              console.log("Successful submit: ", data);
               setRedirect(true);
-              //history.push("/");
           }
           else {
               alert("Unsuccessful submit")
@@ -142,20 +130,24 @@ function FormComponent() {
 
   };
 
+/* redirect to home */
   const redirectToHome = () => {
     if(redirect){
         return <Redirect to='/' />
     }
   }
 
+  /* handles dropdown */
   const handleChange = (e, data ) => {
     setSleep(data.value);
   }
 
+  /* closes the survey */ 
   const closeForm = () => {
     setRedirect(true);
   }
 
+  /* checks if user is logged in and displays their data */
   let loggedInUser = localStorage.getItem("user");
   if (loggedInUser) {
     return (
@@ -168,10 +160,10 @@ function FormComponent() {
                     {/* radio button - mood */}
                     <h3>Mood</h3>
                     <div id="moodItems">
-                      <input type="radio" name="moodInput" id="happy" value="25" required="required" onChange={e=>setMood(e.target.value)}/><label htmlFor="happy"><img src={happy} alt="Happy" height="100" width="120"/></label> &nbsp;
-                      <input type="radio" name="moodInput" id="sad" value="7" onChange={e=>setMood(e.target.value)}/><label htmlFor="sad"><img src={sad} alt="Sad" height="80" width="80"/></label> &nbsp;
-                      <input type="radio" name="moodInput" id="okay" value="19" onChange={e=>setMood(e.target.value)}/><label htmlFor="okay"><img src={okay} alt="Okay" height="80" width="80"/></label> &nbsp;
-                      <input type="radio" name="moodInput" id="tired" value="9" onChange={e=>setMood(e.target.value)}/><label htmlFor="tired"><img src={tired} alt="Tired" height="100" width="100"/></label>
+                      <input type="radio" name="moodInput" id="happy" value="25" required="required" onChange={e=>setMood(e.target.value)}/><label htmlFor="happy"><img src={happy} alt="Happy" height="95" width="115"/></label> &nbsp;
+                      <input type="radio" name="moodInput" id="sad" value="7" onChange={e=>setMood(e.target.value)}/><label htmlFor="sad"><img src={sad} id="sadImage" alt="Sad" height="80" width="80"/></label> &nbsp;
+                      <input type="radio" name="moodInput" id="okay" value="19" onChange={e=>setMood(e.target.value)}/><label htmlFor="okay"><img src={okay} id="okayImage" alt="Okay" height="80" width="80"/></label> &nbsp;
+                      <input type="radio" name="moodInput" id="tired" value="9" onChange={e=>setMood(e.target.value)}/><label htmlFor="tired"><img src={tired} alt="Tired" height="105" width="105"/></label>
                     </div>
                     
                     {/* check boxes - symptoms */}
@@ -179,7 +171,7 @@ function FormComponent() {
                     <div id="symptomItems">
                       <input type="checkbox" name="symptoms" id="cough"/><label>Cough</label> &nbsp;
                       <input type="checkbox" name="symptoms" id="fever"/><label>Fever</label> &nbsp;
-                      <input type="checkbox" name="symptoms" id="runnyNose"/><label>Runny nose</label> &nbsp;
+                      <input type="checkbox" name="symptoms" id="runnyNose"/><label>Runny Nose</label> &nbsp;
                       <input type="checkbox" name="symptoms" id="tasteSmell"/><label>No Taste/Smell</label> &nbsp;
                       <input type="checkbox" name="symptoms" id="fatigued"/><label>Fatigue</label>
                     </div>
@@ -193,14 +185,13 @@ function FormComponent() {
                           min: 1,
                           max: 5,
                           step: 1,
-                          // marks: marks,
                           onChange: (value) => {
                             setStress({
                               value
                             })
                           }
                         }} />
-                    <p>Not stressed ------- Extremely Stressed</p>
+                    <label class="stress">Low</label><label class="stress" id="moderateStress">Moderate</label><label class="stress">Severe</label>
                     {/* drop down - sleep */}
                     <h3>Sleep</h3>
                     <Dropdown
@@ -209,14 +200,12 @@ function FormComponent() {
                         selection
                         options={sleepOptions}
                         value={sleep} 
-                        //onChange= {e=>setSleep(e.target.value)}
                         onChange= {handleChange}
                     />
+                    <div id="submitButton">
                     <input type="submit" id="submitFormButton"/>
-                    
-
-
-
+                    </div>
+                
                 </form>
             </div>
             
@@ -224,7 +213,7 @@ function FormComponent() {
     )
   }
   else{
-    // localStorage.clear();
+ 
     return(
       <div className="login">
         <header className="App-header">
