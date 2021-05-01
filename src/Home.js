@@ -166,10 +166,7 @@ function HomeComponent(){
         })
         .then(response => response.data)
         .then(data => {
-            console.log(data);
-            console.log(username);
             if(data[0].username == username) {
-                console.log(data);
                 setChartData(data);
             }
             else {
@@ -196,8 +193,6 @@ function HomeComponent(){
             let okay_count = 0;
             let tired_count = 0;
 
-            console.log("chart", chartData);
-            console.log("color scheme", colorScheme);
 
             for(let i = 0; i < chartData[0]["score"].length; i++){
                 scoreLabels.push(i);
@@ -367,8 +362,8 @@ function HomeComponent(){
             <h1 id="homeWelcome">Welcome {username}!</h1>
                 <div id="inspiration">
                     <h2>Inspirational Quote of the Day</h2>
-                    <em><p id="inspirationalQuote">Quote</p>
-                    <p id="inspirationalAuthor">Author</p></em>
+                    <em><p id="inspirationalQuote"></p>
+                    <p id="inspirationalAuthor"></p></em>
                 </div>
                 <hr></hr>
                 <strong><label id="goToForm">Complete Daily Survey</label></strong><button id="takeForm" onClick={takeSurvey}> &#8594;</button>
