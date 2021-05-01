@@ -1,8 +1,9 @@
 AVERY DUNN - 472964 - DUNNAVERY100
+
 NICOLE COSTALES - 473556 - NCOSTALES
 
 
-### COVID-19 & Mental Health Portal 
+# COVID-19 & Mental Health Portal 
 ## Project Description
 Users can create an account to keep track of their mental health and COVID-19 symptoms by taking a daily survey. Their data is tracked and plotted for each time they complete the survey. Users are given their score upon completing the survey based on their input. Additionally, users are given suggestions based on their input for how they can improve.
 
